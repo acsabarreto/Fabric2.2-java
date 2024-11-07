@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'java-library-distribution'
+    id 'checkstyle'
+}
+
+group = 'CarTransfer'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://hyperledger.jfrog.io/hyperledger/fabric-maven"
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    compileOnly('org.hyperledger.fabric-chaincode-java:fabric-chaincode-shim:2.2.+')
+    implementation('com.owlike:genson:1.5')
+    implementation('com.google.guava:guava:28.2-jre')
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

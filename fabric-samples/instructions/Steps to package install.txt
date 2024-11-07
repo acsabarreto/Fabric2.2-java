@@ -1,0 +1,57 @@
+Steps to package, install, approve, commit and access chaincode functions:
+
+Before to to perform the steps we should initiate the network and create the channel in test network.
+
+1. ./network.sh u
+2. ./network.sh createchannel -c samplechannel
+
+After it we should load the lifecycle_setup_Org1.sh
+
+3. source ./lifecycle_setup_Org1.sh
+
+To package the chaincode we should execute:
+
+4. peer lifecycle chaincode package <package name>.tar.gz --path <Path to jar file> --lang java --label <label>_1
+
+To install the chaincode we should realize the next steps:
+
+# In Org1 terminal
+
+5. peer lifecycle chaincode install <package name>.tar.gz --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE
+
+6. Observe the package id returned in after the execution of the command above 
+
+# In Org2 terminal
+
+7. source ./lifecycle_setup_Org2.sh
+
+8. peer lifecycle chaincode install <package name>.tar.gz --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE
+
+9. Observe the package id returned in after the execution of the command above. The package id should be the same of the obtained in step 6.
+
+To approve the chaincode we should perform the next steps:
+
+#In Org 1 terminal:
+
+10. peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --channelID samplechannel --name <App ID configured in app gradle> --version <App Version configured in app gradle> --init-required --package-id <package id obtained in steps 6 and 9> --sequence 1
+
+#In Org 2 terminal:
+
+10. peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --channelID samplechannel --name <App ID configured in app gradle> --version <App Version configured in app gradle> --init-required --package-id <package id obtained in steps 6 and 9> --sequence 1
+
+To commit the chaincode we should perform the next steps:
+
+#In Org 1 terminal:
+
+11. source ./lifecycle_setup_Channel_commit.sh
+
+12. peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID samplechannel --name <App ID configured in app gradle> --peerAddresses localhost:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG1 --peerAddresses localhost:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG2 --version <App Version configured in app gradle> --sequence 1 --init-required
+
+13. peer lifecycle chaincode querycommitted --channelID samplechannel --name <App ID configured in app gradle>
+
+To access the chaincode functions we should perform the next steps:
+
+14. peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C samplechannel -n <App ID configured in app gradle> --peerAddresses localhost:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG1 --peerAddresses localhost:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG2 --isInit -c '{"Args":[]}'
+
+15. peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C samplechannel -n <App ID configured in app gradle> --peerAddresses localhost:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG1 --peerAddresses localhost:9051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE_ORG2 -c '{"Args":["<function name>", <function parameters>]}'
+

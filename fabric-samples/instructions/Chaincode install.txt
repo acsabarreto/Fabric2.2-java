@@ -1,0 +1,18 @@
+Para executar o chaincode install:
+
+1.Executar: ./network.sh up
+Caso apareça a Mensagem: 
+=================== WARNING ===================
+  Local fabric binaries and docker images are  
+  out of  sync. This may cause problems.       
+===============================================
+Verificar acima dela o valor de DOCKER_IMAGE_VERSION e executar os seguintes passos:
+1.1. Ir para o diretório fabric-samples:
+1.2 Executar: rm -Rf bin
+1.3. Executar: curl -sSL https://raw.githubusercontent.com/hyperledger/fabric/master/scripts/bootstrap.sh | bash -s <Versão que parece na variável DOCKER_IMAGE_VERSION>
+2.Executar: ./network.sh createChannel -c samplechannel
+3.Executar: peer lifecycle chaincode install hometransfer.tar.gz --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE
+3.1 Erro: Error: failed to retrieve endorser client for install: endorser client failed to connect to peer0.org1.example.com:7051: failed to create new connection: connection error: desc = "transport: error while dialing: dial tcp: lookup peer0.org1.example.com on 127.0.0.53:53: no such host"
+3.1.1. Executar: echo "127.0.0.53 peer0.org1.example.com" | sudo tee -a /etc/hosts
+3.1.1. Executar: echo "127.0.0.53 peer0.org2.example.com" | sudo tee -a /etc/hosts
+
