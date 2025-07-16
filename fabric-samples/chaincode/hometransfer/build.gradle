@@ -30,5 +30,10 @@ shadowJar {
     archiveBaseName = 'chaincode'
     archiveVersion = ''
     archiveClassifier = null
+    manifest {
+        attributes(
+            'Main-Class': 'hometransfer.HomeTransferContractApp'
+        )
+    }
 }
 
