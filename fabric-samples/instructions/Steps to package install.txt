@@ -3,7 +3,7 @@ Steps to package, install, approve, commit and access chaincode functions:
 Before to to perform the steps we should initiate the network and create the channel in test network.
 
 1. ./network.sh up
-2. ./network.sh createchannel -c samplechannel
+2. ./network.sh createChannel -c samplechannel
 
 After it we should load the lifecycle_setup_Org1.sh
 
@@ -11,7 +11,7 @@ After it we should load the lifecycle_setup_Org1.sh
 
 To package the chaincode we should execute:
 
-4. peer lifecycle chaincode package <package name>.tar.gz --path <Path to jar file> --lang java --label <label>_1
+4. peer lifecycle chaincode package <package name>.tar.gz --path <Path to project dir> --lang java --label <label>_1
 
 To install the chaincode we should realize the next steps:
 

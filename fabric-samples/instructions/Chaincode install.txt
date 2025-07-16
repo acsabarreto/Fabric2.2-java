@@ -1,6 +1,6 @@
 Para executar o chaincode install:
 
-1.Executar: ./network.sh up
+1.Executar: ./network.sh up -i 2.5.10
 Caso apareça a Mensagem: 
 =================== WARNING ===================
   Local fabric binaries and docker images are  
